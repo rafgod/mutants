@@ -1,0 +1,20 @@
+# Getting Started
+
+### Reference Documentation
+For further reference, please consider the following sections:
+
+* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
+* [Open Service Broker](https://docs.spring.io/spring-cloud-open-service-broker/docs/current/reference/html5/)
+* [Spring Web Starter](https://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/#boot-features-developing-web-applications)
+* [Spring Web Services](https://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/#boot-features-webservices)
+
+### Guides
+The following guides illustrate how to use some features concretely:
+
+* [Using Spring Cloud Open Service Broker](https://github.com/spring-cloud-samples/bookstore-service-broker)
+* [Spring Cloud Contract Verifier Setup](https://cloud.spring.io/spring-cloud-contract/spring-cloud-contract.html#_spring_cloud_contract_verifier_setup)
+* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
+* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
+* [Producing a SOAP web service](https://spring.io/guides/gs/producing-web-service/)
+
