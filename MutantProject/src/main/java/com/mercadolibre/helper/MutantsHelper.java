@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mercadolibre.enums.MutantSequences;
 import com.mercadolibre.model.DNA;
 import com.mercadolibre.repositories.DNARepository;
 
@@ -46,37 +45,60 @@ public class MutantsHelper {
     public Boolean detectMutantDNA(String[] dnaMutant) {
 
 	List<String> wordList = new ArrayList<>();
+
+	checkHorizontal(dnaMutant, wordList);
+	if (wordList.size() > 1) {
+	    return true;
+	}
+	checkVertical(dnaMutant, wordList);
+	if (wordList.size() > 1) {
+	    return true;
+	}
+
+	checkDiagonalLeftToRight(dnaMutant, wordList);
+	if (wordList.size() > 1) {
+	    return true;
+	}
+	checkDiagonalRightToLeft(dnaMutant, wordList);
+	if (wordList.size() > 1) {
+	    return true;
+	}
+
+	return false;
+
+    }
+
+    private void checkHorizontal(String[] dnaMutant, List<String> wordList) {
 	int dnaLen = dnaMutant.length;
 
-	wordList.addAll(checkDiagonalLeftToRight(dnaMutant));
-	if (wordList.size() > 1) {
-	    return true;
-	}
-	wordList.addAll(checkDiagonalRightToLeft(dnaMutant));
-	if (wordList.size() > 1) {
-	    return true;
-	}
-
+	StringBuilder horizontal = new StringBuilder();
 	for (int x = 0; x < dnaLen; x++) {
-
-	    // Check horizontal DNA
-	    if (dnaMutant[x].contains(MutantSequences.A.getSequence())) {
-		wordList.add(MutantSequences.A.getSequence());
-	    } else if (dnaMutant[x].contains(MutantSequences.T.getSequence())) {
-		wordList.add(MutantSequences.T.getSequence());
-	    } else if (dnaMutant[x].contains(MutantSequences.G.getSequence())) {
-		wordList.add(MutantSequences.G.getSequence());
-	    } else if (dnaMutant[x].contains(MutantSequences.C.getSequence())) {
-		wordList.add(MutantSequences.C.getSequence());
+	    horizontal = new StringBuilder();
+	    for (int y = 0; y < dnaLen && horizontal.length() < SECUENCES_DNA_LENGTH; y++) {
+		if (horizontal.toString().isEmpty() || horizontal.charAt(horizontal.length() - 1) == dnaMutant[x].charAt(y)) {
+		    horizontal.append(dnaMutant[x].charAt(y));
+		} else if (horizontal.length() < SECUENCES_DNA_LENGTH) {
+		    horizontal = new StringBuilder();
+		} else {
+		    break;
+		}
 	    }
 
-	    if (wordList.size() > 1) {
-		return true;
+	    if (horizontal.length() >= SECUENCES_DNA_LENGTH) {
+		wordList.add(horizontal.toString());
+		if (wordList.size() > 1) {
+		    break;
+		}
 	    }
+	}
+    }
 
-	    // Check Vertical DNA
-	    for (int y = 0; y < dnaLen; y++) {
-		StringBuilder vertical = new StringBuilder();
+    private void checkVertical(String[] dnaMutant, List<String> wordList) {
+	int dnaLen = dnaMutant.length;
+	StringBuilder vertical = new StringBuilder();
+	for (int x = 0; x < dnaLen; x++) {
+	    vertical = new StringBuilder();
+	    for (int y = 0; y < dnaLen && vertical.length() < SECUENCES_DNA_LENGTH; y++) {
 		if (vertical.toString().isEmpty() || vertical.charAt(vertical.length() - 1) == dnaMutant[y].charAt(x)) {
 		    vertical.append(dnaMutant[y].charAt(x));
 		} else if (vertical.length() < SECUENCES_DNA_LENGTH) {
@@ -84,26 +106,20 @@ public class MutantsHelper {
 		} else {
 		    break;
 		}
-		if (vertical.length() >= SECUENCES_DNA_LENGTH) {
-		    wordList.add(vertical.toString());
-		    if (wordList.size() > 1) {
-			return true;
-		    }
-		    break;
-		}
-
 	    }
 
+	    if (vertical.length() >= SECUENCES_DNA_LENGTH) {
+		wordList.add(vertical.toString());
+		if (wordList.size() > 1) {
+		    break;
+		}
+	    }
 	}
-
-	return wordList.size() > 1;
-
     }
 
-    private List<String> checkDiagonalRightToLeft(String[] dnaMutant) {
+    private void checkDiagonalRightToLeft(String[] dnaMutant, List<String> wordList) {
 	StringBuilder diagonalLeft = new StringBuilder();
 	int dnaLen = dnaMutant.length;
-	List<String> wordList = new ArrayList<>();
 
 	for (int yr = SECUENCES_DNA_LENGTH - 1; yr < dnaLen; yr++) {
 	    int auxx = 0;
@@ -121,6 +137,9 @@ public class MutantsHelper {
 	    }
 	    if (diagonalLeft.length() >= SECUENCES_DNA_LENGTH) {
 		wordList.add(diagonalLeft.toString());
+		if (wordList.size() > 1) {
+		    break;
+		}
 	    }
 	}
 
@@ -135,16 +154,16 @@ public class MutantsHelper {
 	    }
 	    if (diagonalLeft.length() >= SECUENCES_DNA_LENGTH) {
 		wordList.add(diagonalLeft.toString());
+		if (wordList.size() > 1) {
+		    break;
+		}
 	    }
 	}
 
-	return wordList;
-
     }
 
-    private List<String> checkDiagonalLeftToRight(String[] dnaMutant) {
+    private List<String> checkDiagonalLeftToRight(String[] dnaMutant, List<String> wordList) {
 	StringBuilder diagonal = new StringBuilder();
-	List<String> wordList = new ArrayList<>();
 	int dnaLen = dnaMutant.length;
 	for (int x = 0; x <= dnaLen - SECUENCES_DNA_LENGTH; x++) {
 	    diagonal = new StringBuilder();
