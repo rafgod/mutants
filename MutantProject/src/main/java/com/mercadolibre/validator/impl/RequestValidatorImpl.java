@@ -44,16 +44,25 @@ public class RequestValidatorImpl implements RequestValidator {
 		LOG.error("DNA can only contains this characters ATCG");
 	    } else {
 		int len = request.getDna().length;
-		for (String dna : request.getDna()) {
-		    if (dna.length() != len) {
-			badRequestResponse = new BadRequestResponse();
-			badRequestResponse.setName("DNA");
-			badRequestResponse.setDescription("The DNA sequence is not formulated correctly");
-			response.add(badRequestResponse);
-			LOG.error("The DNA sequence is not formulated correctly");
-			break;
+		if (len != 6) {
+		    badRequestResponse = new BadRequestResponse();
+		    badRequestResponse.setName("DNA");
+		    badRequestResponse.setDescription("The DNA sequence must have a length of 6 caracters");
+		    response.add(badRequestResponse);
+		    LOG.error("The DNA sequence must have a length of 6 caracters");
+		} else {
+		    for (String dna : request.getDna()) {
+			if (dna.length() != len) {
+			    badRequestResponse = new BadRequestResponse();
+			    badRequestResponse.setName("DNA");
+			    badRequestResponse.setDescription("The DNA sequence is not formulated correctly");
+			    response.add(badRequestResponse);
+			    LOG.error("The DNA sequence is not formulated correctly");
+			    break;
+			}
 		    }
 		}
+
 	    }
 	}
 
